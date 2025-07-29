@@ -29,7 +29,7 @@ receivers:
   otlp:
     protocols:
       http:
-        endpoint: 0.0.0.0:4317  # você pode trocar para 4318 se quiser
+        endpoint: 0.0.0.0:4317
 
 processors:
   batch:
