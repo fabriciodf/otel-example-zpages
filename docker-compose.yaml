@@ -1,0 +1,20 @@
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: otel-collector
+    command: ["--config=/etc/otelcol-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol-config.yaml
+    ports:
+      - "4317:4317"      # OTLP HTTP
+      - "55679:55679"    # zPages
+    healthcheck:
+      disable: true
+
+  telemetry-sender:
+    build: ./sender
+    container_name: telemetry-sender
+    depends_on:
+      - otel-collector
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
