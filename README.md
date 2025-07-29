@@ -25,26 +25,36 @@ docker compose up --build
 
 ### Example config.yaml:
 ```yaml
-extensions:
-  zpages:
-
 receivers:
   otlp:
     protocols:
-      grpc:
       http:
+        endpoint: 0.0.0.0:4317  # você pode trocar para 4318 se quiser
+
+processors:
+  batch:
+
+exporters:
+  debug:
+    verbosity: detailed
+
+extensions:
+  zpages:
+    endpoint: 0.0.0.0:55679
 
 service:
-  extensions: [zpages]
   pipelines:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp]
+      exporters: [debug]
+
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp]
+      exporters: [debug]
+
+  extensions: [zpages]
 ```
 
 ### Accessing zPages
